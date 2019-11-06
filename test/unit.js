@@ -25,7 +25,15 @@ it('should be 3 hours ago', function() {
 });
 
 it('should be yesterday', function() {
-	assert.equal(Duration('en')(new Date(), new Date(Date.now() + Duration.day)), 'yesterday');
+	assert.equal(Duration('en')(new Date(Date.now() - Duration.hour), new Date(Date.now() + Duration.day)), 'yesterday');
+});
+
+it('should be yesterday', function() {
+	assert.equal(Duration('en')(new Date(Date.now() - 23 * Duration.hour), new Date(Date.now() + Duration.day)), 'yesterday');
+});
+
+it('should be 2 days ago', function() {
+	assert.equal(Duration('en')(new Date(Date.now() - 24 * Duration.hour), new Date(Date.now() + Duration.day)), '2 days ago');
 });
 
 it('should last month', function() {
