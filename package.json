@@ -1,0 +1,23 @@
+{
+  "name": "duration-relativetimeformat",
+  "version": "1.0.0",
+  "description": "Format duration between two dates using Intl.RelativeTimeFormat",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kapouer/duration-relativetimeformat.git"
+  },
+  "keywords": [
+    "duration",
+    "relativetimeformat"
+  ],
+  "author": "Jérémy Lal <kapouer@melix.org>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kapouer/duration-relativetimeformat/issues"
+  },
+  "homepage": "https://github.com/kapouer/duration-relativetimeformat#readme"
+}
