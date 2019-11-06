@@ -19,5 +19,9 @@
   "bugs": {
     "url": "https://github.com/kapouer/duration-relativetimeformat/issues"
   },
-  "homepage": "https://github.com/kapouer/duration-relativetimeformat#readme"
+  "homepage": "https://github.com/kapouer/duration-relativetimeformat#readme",
+  "devDependencies": {
+    "mocha": "^6.2.2",
+    "relative-time-format": "^1.0.5"
+  }
 }
