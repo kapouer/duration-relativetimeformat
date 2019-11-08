@@ -1,6 +1,6 @@
 {
   "name": "duration-relativetimeformat",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Format duration between two dates using Intl.RelativeTimeFormat",
   "main": "index.js",
   "scripts": {
