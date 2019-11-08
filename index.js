@@ -30,6 +30,7 @@ function Duration(lang, opts={}) {
 				break;
 			case !(delta < minute):
 				unit = 'second';
+				delta = Math.floor(delta / second);
 				break;
 			case !(delta < 2 * minute):
 				unit = 'minute';
