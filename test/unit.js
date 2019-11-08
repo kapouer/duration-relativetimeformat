@@ -12,6 +12,19 @@ it('should be now', function() {
 	assert.equal(Duration('en')(new Date()), 'now');
 });
 
+it('should be now when before/after 30 seconds', function() {
+	assert.equal(Duration('en')(new Date(Date.now() + 29 * Duration.second)), 'now');
+	assert.equal(Duration('en')(new Date(), new Date(Date.now() + 29 * Duration.second)), 'now');
+});
+
+it('should be in 31 seconds', function() {
+	assert.equal(Duration('en')(new Date(Date.now() + 31 * Duration.second)), 'in 31 seconds');
+});
+
+it('should be 31 seconds ago', function() {
+	assert.equal(Duration('en')(new Date(), new Date(Date.now() + 31 * Duration.second)), '31 seconds ago');
+});
+
 it('should be in 1 minute', function() {
 	assert.equal(Duration('en')(new Date(Date.now() + Duration.minute)), 'in 1 minute');
 });
