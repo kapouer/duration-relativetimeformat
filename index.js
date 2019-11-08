@@ -62,4 +62,4 @@ function Duration(lang, opts={}) {
 		}
 		return rtf.format(Math.sign(to - from) * delta, unit);
 	}
-};
+}
