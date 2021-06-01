@@ -9,8 +9,8 @@ const year = Duration.year = day * 365;
 module.exports = Duration;
 
 
-function Duration(lang, opts={}) {
-	var rtf = new Intl.RelativeTimeFormat(lang, Object.assign({
+function Duration(lang, opts = {}) {
+	const rtf = new Intl.RelativeTimeFormat(lang, Object.assign({
 		numeric: 'auto',
 		localeMatcher: 'best fit',
 		style: 'long'
@@ -61,5 +61,5 @@ function Duration(lang, opts={}) {
 				delta = Math.floor(delta / year);
 		}
 		return rtf.format(Math.sign(to - from) * delta, unit);
-	}
+	};
 }

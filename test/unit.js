@@ -6,7 +6,7 @@ if (!Intl.RelativeTimeFormat) {
 
 const Duration = require('..');
 
-var assert = require('assert');
+const assert = require('assert');
 
 it('should be now', function() {
 	assert.equal(Duration('en')(new Date()), 'now');
