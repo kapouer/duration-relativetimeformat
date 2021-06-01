@@ -77,4 +77,8 @@ describe("Unit tests", () => {
 	it('should next month', function () {
 		assert.equal(Duration('en')(new Date(NOW + Duration.month), new Date(NOW)), 'next month');
 	});
+
+	it('should next year', function () {
+		assert.equal(Duration('en')(new Date(NOW + Duration.year), new Date(NOW)), 'next year');
+	});
 });
