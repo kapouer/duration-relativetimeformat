@@ -21,7 +21,15 @@
   },
   "homepage": "https://github.com/kapouer/duration-relativetimeformat#readme",
   "devDependencies": {
+    "@kapouer/eslint-config": "^1.2.1",
     "mocha": "^6.2.2",
     "relative-time-format": "^1.0.5"
+  },
+  "eslintConfig": {
+    "extends": "@kapouer/eslint-config",
+    "env": {
+      "browser": true,
+      "mocha": true
+    }
   }
 }
