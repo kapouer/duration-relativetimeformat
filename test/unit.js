@@ -5,11 +5,12 @@ if (!Intl.RelativeTimeFormat) {
 }
 
 const Duration = require('..');
+const duree = new Duration('en');
 
 const assert = require('assert');
 
 function check(start, end, str) {
-	assert.strictEqual(Duration('en')(new Date(start), new Date(end)), str);
+	assert.strictEqual(duree.format(new Date(start), new Date(end)), str);
 }
 
 describe("Unit tests", () => {

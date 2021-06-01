@@ -1,65 +1,83 @@
-const second = Duration.second = 1000;
-const minute = Duration.minute = 60 * second;
-const hour = Duration.hour = minute * 60;
-const day = Duration.day = hour * 24;
-const week = Duration.week = day * 7;
-const month = Duration.month = day * 30;
-const year = Duration.year = day * 365;
+const millisecond = 1;
+const second = millisecond * 1000;
+const minute = second * 60;
+const hour = minute * 60;
+const day = hour * 24;
+const week = day * 7;
+const month = day * 30;
+const year = day * 365;
 
-module.exports = Duration;
+const Intervals = [
+	['year', year],
+	['month', month],
+	['week', week],
+	['day', day],
+	['hour', hour],
+	['minute', minute],
+	['second', second],
+	['millisecond', millisecond]
+];
+class Duration {
+	constructor(lang, opts = {}) {
+		const { precision = 0.2 } = opts;
+		this.precision = precision;
+		const rOpts = Object.assign({
+			numeric: 'auto',
+			localeMatcher: 'best fit',
+			style: 'long'
+		}, opts);
+		delete rOpts.precision;
 
+		this.rtf = new Intl.RelativeTimeFormat(lang, rOpts);
+	}
 
-function Duration(lang, opts = {}) {
-	const rtf = new Intl.RelativeTimeFormat(lang, Object.assign({
-		numeric: 'auto',
-		localeMatcher: 'best fit',
-		style: 'long'
-	}, opts));
+	lookup(delta, percent) {
+		const big = { abs: 0, round: 0 };
+		const small = { abs: 0, round: 0 };
+		let sum = 0;
+		for (const [unit, val] of Intervals) {
+			const rest = delta - sum;
+			const round = Math.floor(rest / val);
+			const abs = round * val;
+			sum += abs;
+			if (!big.unit) {
+				if (round > 0) {
+					big.unit = unit;
+					big.round = round;
+					big.abs = abs;
+				}
+			} else {
+				small.unit = unit;
+				small.round = round;
+				small.abs = abs;
+				break;
+			}
+		}
+		// FIXME 0 hour -> "this hour"
+		// 0 minute -> "this minute"
+		// so if we fall under percent and big.round is 0,
+		// we actually get "this bigUnit"
+		if (!big.unit) big.unit = 'minute';
+		if (!small.unit) small.unit = 'second';
+		if (small.abs <= percent * big.abs) {
+			return [big.round, big.unit];
+		} else {
+			return [big.round * this.constructor[big.unit] / this.constructor[small.unit], small.unit];
+		}
+	}
 
-	return function formatDuration(to, from = new Date()) {
+	format(to, from = new Date()) {
 		if (!(to instanceof Date)) {
 			to = new Date(to);
 		}
-		let delta = Math.abs(from - to);
-		let unit;
-
-		switch (false) {
-			case !(delta < minute / 2):
-				unit = 'second';
-				delta = 0;
-				break;
-			case !(delta < minute):
-				unit = 'second';
-				delta = Math.floor(delta / second);
-				break;
-			case !(delta < 2 * minute):
-				unit = 'minute';
-				delta = 1;
-				break;
-			case !(delta < hour):
-				unit = 'minute';
-				delta = Math.floor(delta / minute);
-				break;
-			case !(delta < day):
-				unit = 'hour';
-				delta = Math.floor(delta / hour);
-				break;
-			case !(delta < week):
-				unit = 'day';
-				delta = Math.floor(delta / day);
-				break;
-			case !(delta < month):
-				unit = 'week';
-				delta = Math.floor(delta / week);
-				break;
-			case !(delta < year):
-				unit = 'month';
-				delta = Math.floor(delta / month);
-				break;
-			default:
-				unit = 'year';
-				delta = Math.floor(delta / year);
-		}
-		return rtf.format(Math.sign(to - from) * delta, unit);
-	};
+		const delta = to - from;
+		const sign = Math.sign(delta);
+		const [val, unit] = this.lookup(Math.abs(delta), this.precision);
+		return this.rtf.format(sign * val, unit);
+	}
 }
+
+Intervals.forEach(([unit, val]) => Duration[unit] = val);
+
+module.exports = Duration;
+
