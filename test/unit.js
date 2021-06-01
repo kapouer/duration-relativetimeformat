@@ -54,8 +54,16 @@ describe("Unit tests", () => {
 		assert.equal(Duration('en')(new Date(NOW - 24 * Duration.hour), new Date(NOW + Duration.day)), '2 days ago');
 	});
 
-	it('should be last weeek', function () {
+	it('should be six days ago', function () {
+		assert.equal(Duration('en')(new Date(NOW), new Date(NOW + Duration.week - Duration.day)), '6 days ago');
+	});
+
+	it('should be last week', function () {
 		assert.equal(Duration('en')(new Date(NOW), new Date(NOW + Duration.week)), 'last week');
+	});
+
+	it('should be last week too', function () {
+		assert.equal(Duration('en')(new Date(NOW), new Date(NOW + Duration.week + Duration.day)), 'last week');
 	});
 
 	it('should be 2 weeks ago', function () {
