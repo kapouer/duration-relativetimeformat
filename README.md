@@ -5,14 +5,35 @@ print out localized relative durations:
 
 ```js
 const Duration = require('duration-relativetimeformat');
-const duree = new Duration('fr', {
- numeric: 'auto', // those are the default options
- localeMatcher: 'best fit',
- style: 'long',
- precision: 0.2 // used by duration only
-});
+const duree = new Duration('fr');
 
-console.log(duree.format(new Date(Date.now() - 600000)));
+console.log(duree.format(Date.now() - 10 * Duration.minute));
 > il y a 10 minutes
-console.log(duree.format(new Date(Date.now() - 2 * 60 * 1000)), new Date(Date.now() - 24 * 60 * 60 * 1000));
 ```
+
+## constructor(lang, { precision, numeric, style, localeMatcher })
+
+Only lang is required.
+
+## format(to, from = now())
+
+where to and from are either dates, timestamps, or strings.
+
+## examples of results
+
+Non-numeric dates depend on the current date:
+
+- this minute, this hour
+- yesterday, today, tomorrow
+- last week, next week
+- last month, next month
+- last year, next year
+
+Otherwise numeric dates are rounded as much as possible, to avoid things like
+
+- 5 seconds (prefer now)
+- 35 seconds (prefer this minute or in 1 minute)
+- 28 hours (prefer 1 day)
+- 400 minutes (prefer 4 hours)
+
+etc...

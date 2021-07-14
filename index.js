@@ -18,62 +18,62 @@ const Intervals = [
 	['millisecond', millisecond]
 ];
 class Duration {
-	constructor(lang, opts = {}) {
-		const { precision = 0.2 } = opts;
+	constructor(lang, {
+		precision = 0.5,
+		numeric = "auto",
+		localeMatcher = "best fit",
+		style = "long"
+	} = {}) {
 		this.precision = precision;
-		const rOpts = Object.assign({
-			numeric: 'auto',
-			localeMatcher: 'best fit',
-			style: 'long'
-		}, opts);
-		delete rOpts.precision;
-
-		this.rtf = new Intl.RelativeTimeFormat(lang, rOpts);
+		this.rtf = new Intl.RelativeTimeFormat(lang, {
+			numeric, localeMatcher, style
+		});
 	}
 
-	lookup(delta, percent) {
-		const big = { abs: 0, round: 0 };
-		const small = { abs: 0, round: 0 };
-		let sum = 0;
-		for (const [unit, val] of Intervals) {
-			const rest = delta - sum;
-			const round = Math.floor(rest / val);
-			const abs = round * val;
-			sum += abs;
-			if (!big.unit) {
-				if (round > 0) {
-					big.unit = unit;
-					big.round = round;
-					big.abs = abs;
-				}
-			} else {
-				small.unit = unit;
-				small.round = round;
-				small.abs = abs;
-				break;
-			}
-		}
-		// FIXME 0 hour -> "this hour"
-		// 0 minute -> "this minute"
-		// so if we fall under percent and big.round is 0,
-		// we actually get "this bigUnit"
-		if (!big.unit) big.unit = 'minute';
-		if (!small.unit) small.unit = 'second';
-		if (small.abs <= percent * big.abs) {
-			return [big.round, big.unit];
-		} else {
-			return [big.round * this.constructor[big.unit] / this.constructor[small.unit], small.unit];
-		}
+	lookup(from, to) {
+		const delta = Math.abs(to - from);
+		const sign = Math.sign(to - from);
+
+		const years = Math.round(delta / Duration.year);
+		if (years > 1) return [sign * years, 'year'];
+
+		const year = Math.abs(to.getFullYear() - from.getFullYear());
+		const months = Math.round(delta / Duration.month);
+		if (months > 4) return [sign * year, 'year'];
+		if (months > 1) return [sign * months, 'month'];
+
+		const month = Math.abs(to.getMonth() - from.getMonth());
+		const days = Math.round(delta / Duration.day);
+		if (days > 20) return [sign * month, 'month'];
+		if (days > 1) return [sign * days, 'day'];
+
+		const day = Math.abs(to.getDate() - from.getDate());
+		const hours = Math.round(delta / Duration.hour);
+		if (hours > 12) return [sign * day, 'day'];
+		if (hours > 1) return [sign * hours, 'hour'];
+
+		const hour = Math.abs(to.getHours() - from.getHours());
+		const minutes = Math.round(delta / Duration.minute);
+		if (minutes > 40) return [sign * hour, 'hour'];
+
+		const minute = Math.abs(to.getMinutes() - from.getMinutes());
+		const seconds = Math.round(delta / Duration.second);
+		if (minutes > 1) return [sign * minutes, 'minute'];
+		if (seconds > 20) return [sign * minute, 'minute'];
+
+		return [0, 'second'];
 	}
 
 	format(to, from = new Date()) {
 		if (!(to instanceof Date)) {
 			to = new Date(to);
 		}
-		const delta = to - from;
-		const sign = Math.sign(delta);
-		const [val, unit] = this.lookup(Math.abs(delta), this.precision);
-		return this.rtf.format(sign * val, unit);
+		if (!(from instanceof Date)) {
+			from = new Date(from);
+		}
+
+		const [val, unit] = this.lookup(from, to);
+		return this.rtf.format(val, unit);
 	}
 }
 
