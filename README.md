@@ -11,7 +11,7 @@ console.log(duree.format(Date.now() - 10 * Duration.minute));
 > il y a 10 minutes
 ```
 
-## constructor(lang, { precision, numeric, style, localeMatcher })
+## constructor(lang, { numeric, style, localeMatcher })
 
 Only lang is required.
 

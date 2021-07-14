@@ -19,12 +19,10 @@ const Intervals = [
 ];
 class Duration {
 	constructor(lang, {
-		precision = 0.5,
 		numeric = "auto",
 		localeMatcher = "best fit",
 		style = "long"
 	} = {}) {
-		this.precision = precision;
 		this.rtf = new Intl.RelativeTimeFormat(lang, {
 			numeric, localeMatcher, style
 		});
