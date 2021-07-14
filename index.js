@@ -43,8 +43,14 @@ class Duration {
 		if (months > 1) return [sign * months, 'month'];
 
 		const month = Math.abs(to.getMonth() - from.getMonth());
+		const weeks = Math.round(delta / Duration.week);
+		if (weeks > 3) return [sign * month, 'month'];
+		if (weeks > 1) return [sign * weeks, 'week'];
+
+		const weekDist = (to.getDay() || 7) - (from.getDay() || 7);
+		const week = Math.abs(weekDist) > 4 ? 0 : 1;
 		const days = Math.round(delta / Duration.day);
-		if (days > 20) return [sign * month, 'month'];
+		if (days > 4) return [sign * week, 'week'];
 		if (days > 1) return [sign * days, 'day'];
 
 		const day = Math.abs(to.getDate() - from.getDate());

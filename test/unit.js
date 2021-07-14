@@ -82,17 +82,27 @@ describe("Unit tests", () => {
 		check("2020-04-02T00:00:00", "2020-04-04T00:00:00", 'in 2 days');
 	});
 
-	// it('should be last week', function () {
-	// 	check("2020-04-14", "2020-04-09", 'last week');
-	// });
+	it('should be last week', function () {
+		check("2020-04-14", "2020-04-08", 'last week');
+	});
 
-	// it('should be 2 weeks ago', function () {
-	// 	check(-2 * week, '2 weeks ago');
-	// });
+	it('should be next week', function () {
+		check("2021-07-08", "2021-07-13", 'next week');
+	});
+
+	it('should be this week', function () {
+		check("2021-07-17", "2021-07-12", 'this week');
+		check("2021-07-13", "2021-07-18", 'this week');
+	});
+
+	it('should be 2 weeks', function () {
+		check("2021-07-17", "2021-07-28", 'in 2 weeks');
+		check("2021-07-17", "2021-07-05", '2 weeks ago');
+	});
 
 	it('should be this month', function () {
-		check("2020-04-04", "2020-04-25", 'this month');
-		check("2020-04-25", "2020-04-04", 'this month');
+		check("2020-04-04", "2020-04-29", 'this month');
+		check("2020-04-29", "2020-04-04", 'this month');
 	});
 
 	it('should be last month', function () {
